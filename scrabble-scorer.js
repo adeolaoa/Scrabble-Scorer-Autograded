@@ -63,7 +63,7 @@ function simpleScorer(word){
          }
       }
    }
-   console.log(wordCount);
+   //console.log(wordCount);
    return wordCount
 }
 //simpleScorer(word);
@@ -110,14 +110,20 @@ function transform(oldPointStructure) {
 //console.log(transform(oldPointStructure));
 
 let newPointStructure = transform(oldPointStructure);
-//console.log(newPointStructure);
+// console.log(newPointStructure);
+
+/*console.log("Scrabble scoring values for");
+console.log("letter a: ", newPointStructure.a);
+console.log("letter j: ", newPointStructure.j);
+console.log("letter z: ", newPointStructure["z"]);
+*/
 
 function scrabbleScorer(word){
    word = word.toLowerCase();
-   let newPointStructure = transform(oldPointStructure);
+   //let newPointStructure = transform(oldPointStructure);
    let wordCount = 0;
    for (let i = 0; i < word.length; i++){
-      wordCount += newPointStructure[word[i]]
+      wordCount += (transform(oldPointStructure))[word[i]]
    }
    return wordCount;
 };
@@ -126,58 +132,31 @@ function scrabbleScorer(word){
 // taking all the three functions into 1
 const scoringAlgorithms = [
    {
-      name: "Simple Scorer",
+      name: "Simple Score",
       description: "Each letter is worth 1 point.",
-      scorerFunction: function simpleScorer(word){
-         word = word.toUpperCase()
-         let wordCount = 0;
-         for (let i = 0; i < word.length; i++){
-            for (item in onePoint){
-               if (onePoint[item].includes(word[i])){
-                  wordCount += Number(item);
-               }
-            }
-         }
-         return `Score for ${word} is: ${wordCount}`;
-      }
+      scorerFunction: simpleScorer
    },
    {
       name: "Bonus Vowels",
       description: "Vowels are 3 points, consonants are 1 point.",
-      scorerFunction: function vowelBonusScorer(word) {
-         word = word.toUpperCase();
-         let wordCount = 0;
-         for (let i = 0; i < word.length; i++) {
-             for (item in vowel) {
-                 if (vowel[item].includes(word[i])) {
-                     //console.log(pointValue);
-                     wordCount += Number(item); // number turns the value from string to integer
-                 }
-             }
-         }
-         return `Score for ${word} is: ${wordCount}`;
-      }
+      scorerFunction: vowelBonusScorer
    },
    {
       name: "Scrabble",
       description: "The new scoring algorithm",
-      scorerFunction:function scrabbleScorer(word){
-         word = word.toLowerCase();
-         let wordCount = 0;
-         for (let i = 0; i < word.length; i++){
-            wordCount += newPointStructure[word[i]]
-         }
-         return `Score for ${word} is: ${wordCount}`;
-      }
+      scorerFunction: scrabbleScorer
    }
 ];
 
 //console.log(scoringAlgorithms[0]);
-
+// console.log(scoringAlgorithms.length);
 
 function scorerPrompt() {
    console.log("Let's play some Scrabble! ");
    console.log(" ");
+
+   word = input.question("Please enter a word to score: ");
+   console.log("")
 
    console.log("Which scoring algorithm would you like to use?\n");
    console.log("0 - Simple Score: Each letter is worth 1 point.");
@@ -185,24 +164,28 @@ function scorerPrompt() {
    console.log("2 - Scrabble: Uses the traditional Scrabble scoring system.");
    console.log("")
 
-   word = input.question("Please enter a word to score: ");
-   console.log("")
    // Prompt the user to enter the number they want
    choice = input.question("Please enter 0,1, or 2: ");
+   console.log("")
 
    // selecting the scoring algorithm based on the choice of the user
    selectedAlgorithm = scoringAlgorithms[choice];
    console.log("algorithm name: ", selectedAlgorithm.name);
-   return `Score for ${word}:`+ selectedAlgorithm.scorerFunction(word);
+   console.log("")
+   return console.log(`Score for ${word} is: ${selectedAlgorithm.scorerFunction(word)}`);
 }
 
-console.log(scorerPrompt());
+/*
+// Simple scoring
+console.log("algorithm name: ", scoringAlgorithms[0].name);
+console.log("scoringFunction result: ", scoringAlgorithms[0].scorerFunction("JavaScript"));
+*/
 
 function runProgram() {
    //initialPrompt();
    //oldScrabbleScorer(word);
-   //scoringAlgorithms
-   //scorerPrompt();
+   // scoringAlgorithms;
+   scorerPrompt();
    //transform(oldPointStructure);
    //scrabbleScorer(word);
 }
@@ -215,9 +198,10 @@ module.exports = {
    oldPointStructure: oldPointStructure,
    simpleScorer: simpleScorer,
    vowelBonusScorer: vowelBonusScorer,
-   //scrabbleScorer: scrabbleScorer,
+   scrabbleScorer: scrabbleScorer,
    scoringAlgorithms: scoringAlgorithms,
    newPointStructure: newPointStructure,
 	runProgram: runProgram,
 	scorerPrompt: scorerPrompt
 };
+
