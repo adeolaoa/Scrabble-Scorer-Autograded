@@ -155,24 +155,45 @@ function scorerPrompt() {
    console.log("Let's play some Scrabble! ");
    console.log(" ");
 
-   word = input.question("Please enter a word to score: ");
+   let word;
+   let choice;
+   let selectedAlgorithm;
+
+   // ask for word
+   while (true) {
+      word = input.question("Please enter a word to score: ");
+      if (/^[A-Za-z]+$/.test(word)) {
+         break; // Exit the loop if a valid word is entered
+      } else {
+         console.log("Invalid input. Please enter a valid word.");
+      } 
+   }
    console.log("")
 
-   console.log("Which scoring algorithm would you like to use?\n");
-   console.log("0 - Simple Score: Each letter is worth 1 point.");
-   console.log("1 - Bonus Vowels: Vowels are worth 3 points, and consonants are worth 1 point.");
-   console.log("2 - Scrabble: Uses the traditional Scrabble scoring system.");
-   console.log("")
+// asking for a scoring algorithm choice
+   while (true){
+      console.log("Which scoring algorithm would you like to use?\n");
+      console.log("0 - Simple Score: Each letter is worth 1 point.");
+      console.log("1 - Bonus Vowels: Vowels are worth 3 points, and consonants are worth 1 point.");
+      console.log("2 - Scrabble: Uses the traditional Scrabble scoring system.");
+      console.log("")
 
-   // Prompt the user to enter the number they want
-   choice = input.question("Please enter 0,1, or 2: ");
-   console.log("")
-
-   // selecting the scoring algorithm based on the choice of the user
-   selectedAlgorithm = scoringAlgorithms[choice];
-   console.log("algorithm name: ", selectedAlgorithm.name);
-   console.log("")
-   return console.log(`Score for ${word} is: ${selectedAlgorithm.scorerFunction(word)}`);
+      // Prompt the user to enter the number they want
+      choice = input.question("Please enter 0, 1, or 2: ");
+      console.log("")
+      
+      if (choice >= 0 && choice <=  2 ){
+         // selecting the scoring algorithm based on the choice of the user
+         selectedAlgorithm = scoringAlgorithms[choice];
+         console.log("algorithm name: ", selectedAlgorithm.name);
+         console.log("")
+         return console.log(`Score for ${word} is: ${selectedAlgorithm.scorerFunction(word)}`);
+         break; // Exit the loop if a valid choice is entered
+      } else{
+            "Incorrect input. Please enter 0, 1, or 2."
+         }
+   }
+  
 }
 
 /*
